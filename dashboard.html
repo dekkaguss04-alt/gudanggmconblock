@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — GudangPro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body class="dashboard-page">
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="brand-icon-sm">
+        <svg width="24" height="24" viewBox="0 0 36 36" fill="none">
+          <rect x="2" y="10" width="14" height="16" rx="2" fill="var(--gold)"/>
+          <rect x="20" y="6" width="14" height="20" rx="2" fill="var(--gold)" opacity="0.6"/>
+          <rect x="2" y="28" width="32" height="4" rx="2" fill="var(--gold)" opacity="0.4"/>
+        </svg>
+      </div>
+      <span class="sidebar-brand-name">GUDANG<span>GMCONBLOCK</span></span>
+    </div>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Tutup menu">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar" id="sidebarAvatar">A</div>
+    <div class="user-info">
+      <span class="user-name" id="sidebarUsername">Admin</span>
+      <span class="user-role" id="sidebarRole">Administrator</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">MENU UTAMA</div>
+    <a href="#" class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" data-page="stock" onclick="navigate('stock')">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 3a1 1 0 00-1 1v1h14V4a1 1 0 00-1-1H4zM3 9v8a1 1 0 001 1h12a1 1 0 001-1V9H3zm5 2h4v1H8v-1z"/></svg>
+      <span>Stock Material</span>
+    </a>
+    <a href="#" class="nav-item nav-item-in" data-page="tambah" onclick="navigate('tambah')" id="navTambah">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/></svg>
+      <span>Tambah Stock</span>
+    </a>
+    <a href="#" class="nav-item nav-item-out" data-page="kurangi" onclick="navigate('kurangi')" id="navKurangi">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg>
+      <span>Kurangi Stock</span>
+    </a>
+    <a href="#" class="nav-item" data-page="riwayat" onclick="navigate('riwayat')">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/></svg>
+      <span>Riwayat Transaksi</span>
+    </a>
+    <div class="nav-section-label admin-only" id="navAdminSection">ADMINISTRASI</div>
+    <a href="#" class="nav-item admin-only" data-page="material" onclick="navigate('material')" id="navMaterial">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"/></svg>
+      <span>Kelola Material</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="btn-logout" onclick="logout()">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+        <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 100-2H4V5h7a1 1 0 100-2H3zm11.293 4.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-2 2a1 1 0 01-1.414-1.414L15.586 11H9a1 1 0 110-2h6.586l-1.293-1.293a1 1 0 010-1.414z"/>
+      </svg>
+      Keluar
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main-wrap">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="hamburger" id="hamburger" aria-label="Buka menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="topbar-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-actions">
+      <div class="notif-bell" id="notifBell">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+          <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zm0 16a2 2 0 002-2H8a2 2 0 002 2z"/>
+        </svg>
+        <span class="notif-badge" id="notifBadge" style="display:none">!</span>
+      </div>
+      <div class="topbar-user">
+        <div class="user-avatar-sm" id="topbarAvatar">A</div>
+        <span id="topbarUsername">Admin</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGES -->
+  <main class="content-area">
+
+    <!-- ===== PAGE: DASHBOARD ===== -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h1>Dashboard <span class="page-sub">Ringkasan Sistem</span></h1>
+        <div class="page-date" id="currentDate"></div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid" id="statGrid">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- LOW STOCK ALERT -->
+      <div class="alert-section" id="alertSection" style="display:none">
+        <div class="alert-card">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-content">
+            <strong>Peringatan Stock Menipis</strong>
+            <div id="alertList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK STATS -->
+      <div class="section-header">
+        <h2>Stock Material</h2>
+        <div class="section-actions">
+          <button class="btn-export" onclick="exportStockExcel()">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/></svg>
+            Export Excel
+          </button>
+        </div>
+      </div>
+
+      <!-- Material Cards -->
+      <div class="material-cards" id="dashMaterialCards">
+        <!-- Filled by JS -->
+      </div>
+    </section>
+
+    <!-- ===== PAGE: STOCK ===== -->
+    <section class="page" id="page-stock">
+      <div class="page-header">
+        <h1>Stock Material <span class="page-sub">Data Lengkap</span></h1>
+        <div class="page-actions">
+          <button class="btn-export" onclick="exportStockExcel()">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/></svg>
+            Export Stock Excel
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
+          </svg>
+          <input type="text" id="searchStock" placeholder="Cari material..." oninput="renderStockTable()" />
+        </div>
+        <select id="filterKategori" onchange="renderStockTable()" class="filter-select">
+          <option value="">Semua Kategori</option>
+          <option>Paving</option>
+          <option>Kanstin</option>
+          <option>Precast</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data-table" id="stockTable">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Material</th>
+                <th>Kategori</th>
+                <th>Stock</th>
+                <th>Satuan</th>
+                <th>Status</th>
+                <th class="col-actions">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="stockTbody">
+              <!-- Filled by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="table-empty" id="stockEmpty" style="display:none">
+          <svg viewBox="0 0 64 64" fill="none" width="48"><rect x="8" y="16" width="48" height="36" rx="4" stroke="var(--gold)" stroke-width="2"/><path d="M24 28h16M24 36h10" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+          <p>Tidak ada data material</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: TAMBAH STOCK ===== -->
+    <section class="page" id="page-tambah">
+      <div class="page-header">
+        <h1>Tambah Stock <span class="page-sub">Barang Masuk</span></h1>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="form-card-icon in">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/></svg>
+          </div>
+          <span>Form Penambahan Stock</span>
+        </div>
+        <form id="formTambah" class="trans-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Material</label>
+              <select id="tambahMaterial" required class="form-select">
+                <option value="">-- Pilih Material --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Jumlah</label>
+              <div class="input-wrap">
+                <input type="number" id="tambahJumlah" min="1" placeholder="Masukkan jumlah" required />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Keterangan (opsional)</label>
+            <textarea id="tambahKeterangan" placeholder="Keterangan tambahan..." rows="3"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" onclick="resetForm('formTambah')">Reset</button>
+            <button type="submit" class="btn-primary in">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="16"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/></svg>
+              Tambah Stock
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="info-card">
+        <h3>Panduan Tambah Stock</h3>
+        <ul>
+          <li>Pilih material dari daftar yang tersedia</li>
+          <li>Masukkan jumlah stock yang akan ditambahkan</li>
+          <li>Keterangan bersifat opsional</li>
+          <li>Transaksi akan tercatat otomatis di riwayat</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: KURANGI STOCK ===== -->
+    <section class="page" id="page-kurangi">
+      <div class="page-header">
+        <h1>Kurangi Stock <span class="page-sub">Barang Keluar</span></h1>
+      </div>
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="form-card-icon out">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="20"><path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg>
+          </div>
+          <span>Form Pengurangan Stock</span>
+        </div>
+        <form id="formKurangi" class="trans-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Material</label>
+              <select id="kurangiMaterial" required class="form-select">
+                <option value="">-- Pilih Material --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Jumlah</label>
+              <div class="input-wrap">
+                <input type="number" id="kurangiJumlah" min="1" placeholder="Masukkan jumlah" required />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Keterangan (opsional)</label>
+            <textarea id="kurangiKeterangan" placeholder="Keterangan tambahan..." rows="3"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" onclick="resetForm('formKurangi')">Reset</button>
+            <button type="submit" class="btn-primary out">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="16"><path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg>
+              Kurangi Stock
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="info-card danger">
+        <h3>Perhatian</h3>
+        <ul>
+          <li>Stock tidak dapat dikurangi melebihi jumlah yang tersedia</li>
+          <li>Pastikan jumlah yang dimasukkan sudah benar</li>
+          <li>Transaksi tidak dapat dibatalkan setelah dikonfirmasi</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: RIWAYAT ===== -->
+    <section class="page" id="page-riwayat">
+      <div class="page-header">
+        <h1>Riwayat Transaksi <span class="page-sub">Log Aktivitas</span></h1>
+        <div class="page-actions">
+          <button class="btn-export" onclick="exportRiwayatExcel()">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/></svg>
+            Export Riwayat Excel
+          </button>
+          <button class="btn-danger-sm admin-only" id="btnClearRiwayat" style="display:none" onclick="clearRiwayat()">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"/></svg>
+            Hapus Semua
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
+          </svg>
+          <input type="text" id="searchRiwayat" placeholder="Cari riwayat..." oninput="renderRiwayatTable()" />
+        </div>
+        <select id="filterJenis" onchange="renderRiwayatTable()" class="filter-select">
+          <option value="">Semua Jenis</option>
+          <option value="MASUK">Barang Masuk</option>
+          <option value="KELUAR">Barang Keluar</option>
+        </select>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data-table" id="riwayatTable">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Tanggal & Waktu</th>
+                <th>Nama Material</th>
+                <th>Jenis</th>
+                <th>Jumlah</th>
+                <th>Stock Akhir</th>
+                <th>Operator</th>
+                <th>Keterangan</th>
+              </tr>
+            </thead>
+            <tbody id="riwayatTbody">
+              <!-- Filled by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="table-empty" id="riwayatEmpty" style="display:none">
+          <svg viewBox="0 0 64 64" fill="none" width="48"><rect x="8" y="16" width="48" height="36" rx="4" stroke="var(--gold)" stroke-width="2"/><path d="M24 28h16M24 36h10" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+          <p>Belum ada riwayat transaksi</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: KELOLA MATERIAL (ADMIN ONLY) ===== -->
+    <section class="page" id="page-material">
+      <div class="page-header">
+        <h1>Kelola Material <span class="page-sub">Admin Panel</span></h1>
+        <button class="btn-primary in" onclick="openModalTambahMaterial()">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/></svg>
+          Tambah Material Baru
+        </button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data-table" id="materialTable">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Material</th>
+                <th>Kategori</th>
+                <th>Stock Awal</th>
+                <th>Satuan</th>
+                <th>Stok Min. Alert</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="materialTbody">
+              <!-- Filled by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== MODAL: TAMBAH MATERIAL ===== -->
+<div class="modal-overlay" id="modalTambahMaterial">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Tambah Material Baru</h3>
+      <button class="modal-close" onclick="closeModal('modalTambahMaterial')">✕</button>
+    </div>
+    <form id="formTambahMaterial" class="modal-form">
+      <div class="form-group">
+        <label>Nama Material</label>
+        <input type="text" id="matNama" placeholder="Contoh: Paving K300" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="matKategori" required class="form-select">
+            <option value="">-- Pilih --</option>
+            <option>Paving</option>
+            <option>Batako</option>
+            <option>Kanstin</option>
+            <option>Conblock</option>
+            <option>Pasir</option>
+            <option>Semen</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Satuan</label>
+          <input type="text" id="matSatuan" placeholder="pcs / m³ / sak" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Stock Awal</label>
+          <input type="number" id="matStock" min="0" placeholder="0" required />
+        </div>
+        <div class="form-group">
+          <label>Minimum Alert</label>
+          <input type="number" id="matMinAlert" min="0" placeholder="50" required />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeModal('modalTambahMaterial')">Batal</button>
+        <button type="submit" class="btn-primary in">Simpan Material</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== MODAL: KONFIRMASI ===== -->
+<div class="modal-overlay" id="modalKonfirmasi">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3 id="konfirmasiTitle">Konfirmasi</h3>
+      <button class="modal-close" onclick="closeModal('modalKonfirmasi')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="konfirmasiText">Apakah Anda yakin?</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modalKonfirmasi')">Batal</button>
+      <button class="btn-danger" id="konfirmasiBtn">Ya, Lanjutkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: EDIT MATERIAL ===== -->
+<div class="modal-overlay" id="modalEditMaterial">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit Material</h3>
+      <button class="modal-close" onclick="closeModal('modalEditMaterial')">✕</button>
+    </div>
+    <form id="formEditMaterial" class="modal-form">
+      <input type="hidden" id="editMatId" />
+      <div class="form-group">
+        <label>Nama Material</label>
+        <input type="text" id="editMatNama" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="editMatKategori" required class="form-select">
+            <option>Paving</option>
+            <option>Batako</option>
+            <option>Kanstin</option>
+            <option>Conblock</option>
+            <option>Pasir</option>
+            <option>Semen</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Satuan</label>
+          <input type="text" id="editMatSatuan" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Minimum Alert</label>
+        <input type="number" id="editMatMinAlert" min="0" required />
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeModal('modalEditMaterial')">Batal</button>
+        <button type="submit" class="btn-primary in">Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== TOAST NOTIFICATION ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- SCRIPTS -->
+<script src="js/auth.js"></script>
+<script src="js/stock.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

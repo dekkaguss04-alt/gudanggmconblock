@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — GudangPro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="login-page">
+
+  <!-- Background grid -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="brand-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="2" y="10" width="14" height="16" rx="2" fill="var(--gold)"/>
+            <rect x="20" y="6" width="14" height="20" rx="2" fill="var(--gold)" opacity="0.6"/>
+            <rect x="2" y="28" width="32" height="4" rx="2" fill="var(--gold)" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">GUDANG<span>GMCONBLOCK</span></span>
+          <span class="brand-sub">Warehouse Management System</span>
+        </div>
+      </div>
+
+      <div class="login-divider"></div>
+
+      <h2 class="login-title">Selamat Datang</h2>
+      <p class="login-desc">Masukkan kredensial Anda untuk mengakses sistem</p>
+
+      <form id="loginForm" class="login-form" autocomplete="off">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 10a4 4 0 100-8 4 4 0 000 8zm0 2c-4 0-8 1.8-8 4v1h16v-1c0-2.2-4-4-8-4z"/>
+            </svg>
+            <input type="text" id="username" placeholder="Masukkan username" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 2a4 4 0 00-4 4v2H4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-2V6a4 4 0 00-4-4zm0 2a2 2 0 012 2v2H8V6a2 2 0 012-2zm0 8a2 2 0 110 4 2 2 0 010-4z"/>
+            </svg>
+            <input type="password" id="password" placeholder="Masukkan password" required />
+            <button type="button" class="toggle-pw" id="togglePw" aria-label="Tampilkan password">
+              <svg viewBox="0 0 20 20" fill="currentColor" id="eyeIcon">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="loginError" class="login-error" style="display:none"></div>
+
+        <button type="submit" class="btn-login" id="loginBtn">
+          <span class="btn-text">MASUK</span>
+          <div class="btn-loader" style="display:none">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+          </div>
+        </button>
+      </form>
+
+      <div class="login-hint">
+        <p>Akun Default:</p>
+        <div class="hint-grid">
+          <div class="hint-item">
+            <span class="hint-role admin">Admin</span>
+            <span>admin / admin123</span>
+          </div>
+          <div class="hint-item">
+            <span class="hint-role masuk">Op. Masuk</span>
+            <span>masuk / masuk123</span>
+          </div>
+          <div class="hint-item">
+            <span class="hint-role keluar">Op. Keluar</span>
+            <span>keluar / keluar123</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
